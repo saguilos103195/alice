@@ -1,17 +1,34 @@
-<?php
-$target_dir = "uploads/";
-$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-$uploadOk = 1;
-$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
-// Check if image file is a actual image or fake image
-if(isset($_POST["submit"])) {
-    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-    if($check !== false) {
-        echo "File is an image - " . $check["mime"] . ".";
-        $uploadOk = 1;
-    } else {
-        echo "File is not an image.";
-        $uploadOk = 0;
-    }
-}
-?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <?php
+
+        $filename = __DIR__. '/'. md5(date('Y-m-d H:i:s')) . '.jpg';
+
+        class Upload
+        {
+            public function __construct($name)
+            {
+
+            }
+            public function moveUpload($file, $name)
+            {
+                move_uploaded_file($file, $name);
+            }
+        }
+
+        $up = new Upload($filename);
+        $up->moveUpload($_FILES['avatar']['tmp_name'], $filename);
+
+
+    ?>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="avatar">
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>
